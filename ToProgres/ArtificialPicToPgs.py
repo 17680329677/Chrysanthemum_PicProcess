@@ -44,6 +44,7 @@ def save_to_pgs(pathList):
         pic_size = os.path.getsize(path)
         pic_size = round(pic_size / float(1024 * 1024), 2)
 
+
         database = help.openDB()
         conn = database[0]
         cur = database[1]
@@ -60,6 +61,7 @@ def save_to_pgs(pathList):
 if __name__ == '__main__':
     print(help.getRoot() + '/config/dataConfig.json')
     pathList = get_filename(help.read_conf(help.getRoot() + '/config/dataConfig.json')['artificial'])
-    save_to_pgs(pathList)
+    print(pathList)
+    # save_to_pgs(pathList)
 
 

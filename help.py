@@ -34,7 +34,7 @@ def rmdir(path):
 def remove_dir_file(path):
     if len(os.listdir(path)):   # 有文件、子文件夹
         for sub_name in os.listdir(path):
-            print(sub_name)
+            # print(sub_name)
             sub_path = os.path.join(path, sub_name)
             if os.path.isfile(sub_path):    # 是文件
                 os.remove(sub_path)
