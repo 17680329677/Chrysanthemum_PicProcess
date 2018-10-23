@@ -16,5 +16,6 @@
     "port":"6379"
   },
   "artificial": "G:\\mum_pic\\artificial\\pic",
-  "artificial_porcessed": "G:\\mum_pic\\artificial\\processed"
+  "artificial_porcessed": "G:\\mum_pic\\artificial\\processed",
+  "user_file": "G:\\mum_users_file"
 }

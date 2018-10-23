@@ -7,6 +7,7 @@
 import os
 import psycopg2
 import redis
+import zipfile
 
 
 
@@ -75,3 +76,16 @@ def save_redis(key_name, data, expire_time=600):
     r.set(key_name, data)
     r.expire(key_name, expire_time)
 
+
+# 压缩文件的方法
+def compress(get_file_path, set_file_path):
+    f = zipfile.ZipFile(set_file_path, 'w', zipfile.ZIP_DEFLATED)
+    
+    for dirpath, dirnames, filenames in os.walk(get_file_path):
+        fpath = dirpath.replace(get_file_path, '')
+        fpath = fpath and fpath + os.sep or ''
+        for filename in filenames:
+            if filename != set_file_path.split('\\')[-1]:
+                f.write(os.path.join(dirpath, filename), fpath+filename)
+    f.close()
+    print('压缩成功！')
