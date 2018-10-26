@@ -58,7 +58,8 @@ def artificial_pic_process(message):
                     with open(path + "\\" + id[i] + '\\' +rows[j][3].split('\\')[-1], "rb") as img:
                         cultivar_id = id[i]
                         base64_data = base64.b64encode(img.read())
-                        print(base64_data)
+                        print(str(base64_data, 'utf8'))
+                        base64_data = str(base64_data, 'utf8')
                         type = rows[j][3].split('\\')[-1].split('.')[0][-1]
                         sql = '''insert into pic_''' + email.split('@')[0] + '''_artificial (cultivar_id, pic_type, base64) values (%s,%s,%s)'''
                         cur.execute(sql, (cultivar_id, type, base64_data))

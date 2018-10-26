@@ -26,34 +26,20 @@ def get_filename(file_dir):
 
 
 def save_to_pgs(pathList):
+    database = help.openDB()
+    conn = database[0]
+    cur = database[1]
     for path in pathList:
-        # 将路径分割开
-        item = path.split('\\')
-        # 读取文件名全名
-        fullname = item[len(item)-1]
-        # 利用正则搜索id
-        id_search = re.search(r'\d+', fullname)
-        id = id_search[0]
-        # 将id截取掉
-        str1 = fullname[id_search.end():len(fullname)]
-        # 利用正则匹配图片类型 1：花，2-3：花瓣，4-5：叶
-        type_search = re.search(r'\d+', str1)
-        pic_type = type_search[0]
-
-        # 获取文件大小
-        pic_size = os.path.getsize(path)
-        pic_size = round(pic_size / float(1024 * 1024), 2)
-
-
-        database = help.openDB()
-        conn = database[0]
-        cur = database[1]
+        data = help.artificial_file_split(path)
+        id = data[0]
+        pic_type = data[1]
+        pic_size = data[2]
 
         cur.execute("INSERT INTO artificial_shot_pictures (cultivar_id,pic_type,format,path,pic_size) "
                     "values  (%s,%s,%s,%s,%s)", (id, pic_type, 'JPG', path, pic_size))
         conn.commit()
-        cur.close()
-        conn.close
+    cur.close()
+    conn.close
     print('执行完毕')
 
 

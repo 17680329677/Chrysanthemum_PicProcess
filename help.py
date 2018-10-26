@@ -8,8 +8,7 @@ import os
 import psycopg2
 import redis
 import zipfile
-
-
+import re
 
 
 # 创建新的文件夹
@@ -67,6 +66,29 @@ def openDB():
     # 获取数据库连接句柄
     cur = conn.cursor()
     return [conn, cur]
+
+
+def artificial_file_split(file_path):
+    # 获取文件的名称
+    file_name = file_path.split('\\')[-1]
+    data = []
+
+    # 利用正则搜索id
+    id_search = re.search(r'\d+', file_name)
+    id = id_search[0]
+    data.append(id)
+    # 将id截取掉
+    str1 = file_name[id_search.end():len(file_name)]
+    # 利用正则匹配图片类型 1：花，2-3：花瓣，4-5：叶
+    type_search = re.search(r'\d+', str1)
+    pic_type = type_search[0]
+    data.append(pic_type)
+
+    # 获取文件大小
+    pic_size = os.path.getsize(file_path)
+    pic_size = round(pic_size / float(1024 * 1024), 2)
+    data.append(pic_size)
+    return data
 
 
 # 写入redis数据库，以便php获取python的图片处理的状态
