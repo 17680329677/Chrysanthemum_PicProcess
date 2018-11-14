@@ -59,6 +59,16 @@ def read_conf(filename):
     return config
 
 
+# 定义一个读取指定文件夹所有文件名的方法
+def get_filename(file_dir):
+    L = []
+    # root为文件根路径，dirs为该路径下子文件夹， files为该目录下所有文件的文件名
+    for root, dirs, files in os.walk(file_dir):
+        for file in files:
+            L.append(os.path.join(root, file))
+    return L
+
+
 # 获取数据库连接的操作句柄
 def openDB():
     # 配置数据库连接参数

@@ -2,6 +2,7 @@ import nsq
 import help
 from ArtificialPic import artificial_pic
 from Email import packAndSend
+from InstrumentPic import instrument_pic
 
 nsq_conf = help.read_conf(help.getRoot() + '/config/dataConfig.json')['nsq']
 heartbeat = 36
@@ -23,6 +24,13 @@ send_email = nsq.Reader(
     max_tries=max_tries, heartbeat_interval=heartbeat
 )
 
+instrumentOriginPicProcess = nsq.Reader(
+    message_handler=instrument_pic.origin_process,
+    nsqd_tcp_addresses=[nsq_conf['host'] + ":" + nsq_conf['port']],
+    topic='instrumentOriginPicProcess', channel='channel',
+    lookupd_poll_interval=15,
+    max_tries=max_tries, heartbeat_interval=heartbeat
+)
 
-print("pic process 0.1")
+print("pic process 0.2")
 nsq.run()

@@ -17,5 +17,8 @@
   },
   "artificial": "G:\\mum_pic\\artificial\\pic",
   "artificial_porcessed": "G:\\mum_pic\\artificial\\processed",
+  "instrument_origin": "G:\\mum_pic\\instrument\\origin",
+  "instrument_process": "G:\\mum_pic\\instrument\\process",
+  "instrument_compress": "G:\\mum_pic\\instrument\\compress",
   "user_file": "G:\\mum_users_file"
 }
