@@ -36,16 +36,16 @@ def artificial_pic_process(message):
         rows = cur.fetchall()
         conn.commit()
         if rows:
-            try:
-                # print(email.split('@')[0])
-                # 为用户创建一个存储处理过的图片的数据表
-                sql = '''create table if not exists pic_'''  + email.split('@')[0] + '''_artificial (cultivar_id INT NOT NULL, pic_type VARCHAR, base64 TEXT NOT NULL);'''
-                cur.execute(sql)
-                cur.execute("delete from pic_" + email.split('@')[0] + "_artificial")
-                conn.commit()
-                print("数据库表创建成功！")
-            except:
-                print("数据库表创建失败")
+            # try:
+            #     # print(email.split('@')[0])
+            #     # 为用户创建一个存储处理过的图片的数据表
+            #     sql = '''create table if not exists pic_'''  + email.split('@')[0] + '''_artificial (cultivar_id INT NOT NULL, pic_type VARCHAR, base64 TEXT NOT NULL);'''
+            #     cur.execute(sql)
+            #     cur.execute("delete from pic_" + email.split('@')[0] + "_artificial")
+            #     conn.commit()
+            #     print("数据库表创建成功！")
+            # except:
+            #     print("数据库表创建失败")
 
             try:
                 # 按照id再创建不同品种的文件夹
@@ -54,15 +54,16 @@ def artificial_pic_process(message):
                     print(rows[j][3])
 
                     image = Image.open(rows[j][3])
-                    image.save(path + "\\" + id[i] + '\\' +rows[j][3].split('\\')[-1], quality=10)
+                    image.thumbnail((600, 400), Image.ANTIALIAS)
+                    image.save(path + "\\" + id[i] + '\\' +rows[j][3].split('\\')[-1])
                     with open(path + "\\" + id[i] + '\\' +rows[j][3].split('\\')[-1], "rb") as img:
                         cultivar_id = id[i]
+                        type = rows[j][3].split('\\')[-1].split('.')[0][-1]
                         base64_data = base64.b64encode(img.read())
                         print(str(base64_data, 'utf8'))
                         base64_data = str(base64_data, 'utf8')
-                        type = rows[j][3].split('\\')[-1].split('.')[0][-1]
-                        sql = '''insert into pic_''' + email.split('@')[0] + '''_artificial (cultivar_id, pic_type, base64) values (%s,%s,%s)'''
-                        cur.execute(sql, (cultivar_id, type, base64_data))
+                        sql = '''update artificial_shot_pictures set base64 = %s where cultivar_id = %s and pic_type = %s'''
+                        cur.execute(sql, (base64_data, cultivar_id, type))
                         conn.commit()
                     # shutil.copy(rows[j][3], path + "\\" + id[i])
                     # print(rows[j][3].split('\\')[-1])
